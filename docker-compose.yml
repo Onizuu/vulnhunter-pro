@@ -1,0 +1,99 @@
+version: '3.8'
+
+services:
+  # Application principale
+  vulnhunter:
+    build: .
+    container_name: vulnhunter-app
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/app
+      - ./rapports/output:/app/rapports/output
+      - ./logs:/app/logs
+    environment:
+      - DATABASE_URL=postgresql://vulnhunter:vulnhunter_pass@postgres:5432/vulnhunter_db
+      - REDIS_URL=redis://redis:6379/0
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - vulnhunter-network
+    restart: unless-stopped
+
+  # Base de données PostgreSQL
+  postgres:
+    image: postgres:16-alpine
+    container_name: vulnhunter-postgres
+    environment:
+      - POSTGRES_USER=vulnhunter
+      - POSTGRES_PASSWORD=vulnhunter_pass
+      - POSTGRES_DB=vulnhunter_db
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - vulnhunter-network
+    restart: unless-stopped
+
+  # Redis pour le cache et les sessions
+  redis:
+    image: redis:7-alpine
+    container_name: vulnhunter-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - vulnhunter-network
+    restart: unless-stopped
+
+  # Nuclei pour scan CVE
+  nuclei:
+    image: projectdiscovery/nuclei:latest
+    container_name: vulnhunter-nuclei
+    volumes:
+      - ./nuclei-templates:/root/nuclei-templates
+    networks:
+      - vulnhunter-network
+    command: -update-templates
+
+  # Applications vulnérables pour tests
+  dvwa:
+    image: vulnerables/web-dvwa
+    container_name: vulnhunter-dvwa
+    ports:
+      - "8080:80"
+    networks:
+      - vulnhunter-network
+    restart: unless-stopped
+
+  juiceshop:
+    image: bkimminich/juice-shop
+    container_name: vulnhunter-juiceshop
+    ports:
+      - "3000:3000"
+    networks:
+      - vulnhunter-network
+    restart: unless-stopped
+
+  webgoat:
+    image: webgoat/webgoat
+    container_name: vulnhunter-webgoat
+    ports:
+      - "8081:8080"
+    networks:
+      - vulnhunter-network
+    restart: unless-stopped
+
+volumes:
+  postgres-data:
+  redis-data:
+
+networks:
+  vulnhunter-network:
+    driver: bridge
+

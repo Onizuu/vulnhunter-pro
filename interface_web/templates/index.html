@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VulnHunter Pro - Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/hacker_theme.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">🛡️ VULNHUNTER PRO</div>
+            <div class="status-bar">
+                <span id="connection-status" class="status-indicator disconnected">OFFLINE</span>
+                <span id="scan-status" class="status-indicator">PRÊT</span>
+            </div>
+        </header>
+
+        <main>
+            <div class="control-panel">
+                <div class="input-group">
+                    <span class="input-label">CIBLE</span>
+                    <input type="text" id="target-url" placeholder="https://example.com" value="http://testphp.vulnweb.com">
+                </div>
+                <div class="options-group">
+                    <label class="checkbox-label"><input type="checkbox" id="auth-enabled"> AUTH</label>
+                    <label class="checkbox-label"><input type="checkbox" id="api-fuzzing" checked> API FUZZ</label>
+                </div>
+                <div class="actions">
+                    <button id="btn-scan" class="btn primary">
+                        <span>LANCER SCAN</span>
+                    </button>
+                    <button id="btn-pause" class="btn warning" disabled>
+                        <span>PAUSE</span>
+                    </button>
+                    <button id="btn-resume" class="btn success" disabled style="display:none;">
+                        <span>REPRENDRE</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <!-- Logs en temps réel -->
+                <div class="panel logs-panel">
+                    <div class="panel-header">
+                        <span class="panel-title">📋 SYSTEM LOGS</span>
+                    </div>
+                    <div id="logs-container" class="terminal-window">
+                        <!-- Logs will appear here -->
+                    </div>
+                </div>
+
+                <!-- Statistiques et Graphiques -->
+                <div class="panel stats-panel">
+                    <div class="panel-header">
+                        <span class="panel-title">📊 MÉTRIQUES DE VULNÉRABILITÉ</span>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-box critical">
+                            <span class="stat-label">CRITIQUE</span>
+                            <span id="count-critical" class="stat-value">0</span>
+                        </div>
+                        <div class="stat-box high">
+                            <span class="stat-label">ÉLEVÉE</span>
+                            <span id="count-high" class="stat-value">0</span>
+                        </div>
+                        <div class="stat-box medium">
+                            <span class="stat-label">MOYENNE</span>
+                            <span id="count-medium" class="stat-value">0</span>
+                        </div>
+                        <div class="stat-box low">
+                            <span class="stat-label">FAIBLE</span>
+                            <span id="count-low" class="stat-value">0</span>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="vulnChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>

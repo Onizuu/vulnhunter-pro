@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VulnHunter Pro - Scanner de Vulnérabilités</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <div class="logo-icon">🛡️</div>
+                <span class="logo-text">VulnHunter Pro</span>
+            </div>
+            <div id="connection-status" class="status-badge offline">
+                <span class="status-dot"></span>
+                <span id="status-text">Déconnecté</span>
+            </div>
+        </header>
+
+        <!-- View 1: Configuration (Before Scan) -->
+        <div id="view-config" class="view active">
+            <div class="grid-2">
+                <!-- Scan Configuration -->
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">🎯 Configuration du Scan</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">URL Cible</label>
+                        <input type="text" id="target-url" class="form-input" placeholder="https://example.com"
+                            value="http://testphp.vulnweb.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Options</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="opt-api-fuzzing" checked>
+                                API Fuzzing
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="opt-auth">
+                                Authentification
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="opt-aggressive">
+                                Mode Agressif
+                            </label>
+                        </div>
+                    </div>
+
+                    <button id="btn-start-scan" class="btn btn-primary btn-lg" style="width: 100%; margin-top: 16px;">
+                        🚀 Démarrer le Scan
+                    </button>
+                </div>
+
+                <!-- API Keys Configuration -->
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">🔑 Clés API (Optionnel)</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">OpenAI API Key</label>
+                        <input type="password" id="api-openai" class="form-input" placeholder="sk-...">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Anthropic (Claude) API Key</label>
+                        <input type="password" id="api-anthropic" class="form-input" placeholder="sk-ant-...">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">NIST NVD API Key</label>
+                        <input type="password" id="api-nist" class="form-input" placeholder="Clé pour base CVE NIST">
+                    </div>
+
+                    <button id="btn-save-keys" class="btn btn-secondary" style="width: 100%;">
+                        💾 Sauvegarder les clés
+                    </button>
+                    <p style="font-size: 12px; color: var(--text-muted); margin-top: 12px; text-align: center;">
+                        Les clés sont stockées localement dans votre navigateur
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- View 2: Scanning (During Scan) -->
+        <div id="view-scanning" class="view">
+            <!-- Progress Bar -->
+            <div class="progress-container">
+                <div class="progress-header">
+                    <span class="progress-title">Scan en cours...</span>
+                    <span id="progress-phase" class="progress-phase">Initialisation</span>
+                </div>
+                <div class="progress-bar-wrapper">
+                    <div id="progress-bar" class="progress-bar-fill" style="width: 0%"></div>
+                </div>
+                <div class="progress-steps">
+                    <div id="step-1" class="progress-step active">
+                        <div class="progress-step-number">1</div>
+                        <span class="progress-step-label">Reconnaissance</span>
+                    </div>
+                    <div id="step-2" class="progress-step">
+                        <div class="progress-step-number">2</div>
+                        <span class="progress-step-label">Détection</span>
+                    </div>
+                    <div id="step-3" class="progress-step">
+                        <div class="progress-step-number">3</div>
+                        <span class="progress-step-label">Validation</span>
+                    </div>
+                    <div id="step-4" class="progress-step">
+                        <div class="progress-step-number">4</div>
+                        <span class="progress-step-label">Exploits</span>
+                    </div>
+                    <div id="step-5" class="progress-step">
+                        <div class="progress-step-number">5</div>
+                        <span class="progress-step-label">Rapport</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="grid-4 mb-4">
+                <div class="stat-card critical">
+                    <div id="count-critical" class="stat-value">0</div>
+                    <div class="stat-label">Critiques</div>
+                </div>
+                <div class="stat-card high">
+                    <div id="count-high" class="stat-value">0</div>
+                    <div class="stat-label">Élevées</div>
+                </div>
+                <div class="stat-card medium">
+                    <div id="count-medium" class="stat-value">0</div>
+                    <div class="stat-label">Moyennes</div>
+                </div>
+                <div class="stat-card low">
+                    <div id="count-low" class="stat-value">0</div>
+                    <div class="stat-label">Faibles</div>
+                </div>
+            </div>
+
+            <!-- Logs -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">📋 Logs en temps réel</span>
+                    <button id="btn-pause" class="btn btn-warning">⏸️ Pause</button>
+                </div>
+                <div id="logs-container" class="logs-panel">
+                    <!-- Logs appear here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- View 3: Results (After Scan) -->
+        <div id="view-results" class="view">
+            <div class="results-header">
+                <h1 class="results-title">✅ Scan Terminé</h1>
+                <p class="results-subtitle">Analyse de sécurité complète de <span id="result-target"></span></p>
+            </div>
+
+            <!-- Final Stats -->
+            <div class="grid-4 mb-4">
+                <div class="stat-card critical">
+                    <div id="final-critical" class="stat-value">0</div>
+                    <div class="stat-label">Critiques</div>
+                </div>
+                <div class="stat-card high">
+                    <div id="final-high" class="stat-value">0</div>
+                    <div class="stat-label">Élevées</div>
+                </div>
+                <div class="stat-card medium">
+                    <div id="final-medium" class="stat-value">0</div>
+                    <div class="stat-label">Moyennes</div>
+                </div>
+                <div class="stat-card low">
+                    <div id="final-low" class="stat-value">0</div>
+                    <div class="stat-label">Faibles</div>
+                </div>
+            </div>
+
+            <!-- Download Cards -->
+            <div class="download-grid">
+                <a id="dl-report" href="#" target="_blank" class="download-card">
+                    <div class="download-icon">📄</div>
+                    <div class="download-label">Rapport Technique</div>
+                    <div class="download-desc">Rapport HTML complet</div>
+                </a>
+                <a id="dl-json" href="#" download class="download-card">
+                    <div class="download-icon">📊</div>
+                    <div class="download-label">Données JSON</div>
+                    <div class="download-desc">Export structuré</div>
+                </a>
+                <a id="dl-executive" href="#" target="_blank" class="download-card">
+                    <div class="download-icon">📋</div>
+                    <div class="download-label">Résumé Exécutif</div>
+                    <div class="download-desc">Pour la direction</div>
+                </a>
+                <a id="dl-logs" href="#" download class="download-card">
+                    <div class="download-icon">⚠️</div>
+                    <div class="download-label">Logs d'Erreurs</div>
+                    <div class="download-desc">Pour le debugging</div>
+                </a>
+            </div>
+
+            <!-- New Scan Button -->
+            <div class="text-center mt-4">
+                <button id="btn-new-scan" class="btn btn-primary btn-lg">
+                    🔄 Nouveau Scan
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+
+</html>

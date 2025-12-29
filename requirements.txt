@@ -1,0 +1,69 @@
+# VulnHunter Pro - Dépendances
+# Framework Web
+Flask>=3.0.0
+Flask-CORS>=4.0.0
+Flask-SocketIO>=5.3.0
+flask-restx>=1.3.0
+
+# Base de données
+SQLAlchemy>=2.0.0
+psycopg2-binary>=2.9.0
+redis>=5.0.0
+
+# Scanning et Sécurité
+requests>=2.31.0
+aiohttp>=3.9.0
+beautifulsoup4>=4.12.0
+lxml>=4.9.0
+python-nmap>=0.7.1
+dnspython>=2.4.0
+websockets>=11.0.0
+networkx>=3.0
+pandas>=2.0.0
+matplotlib>=3.5.0
+seaborn>=0.11.0
+plotly>=5.0.0
+
+# Intelligence Artificielle
+openai>=1.0.0
+anthropic>=0.7.0
+mistralai>=1.0.0
+requests>=2.31.0  # Pour test Ollama
+
+# Analyse et Validation
+validators>=0.20.0
+python-whois>=0.8.0
+cryptography>=41.0.0
+
+# Génération de rapports
+jinja2>=3.1.0
+reportlab>=4.0.0
+weasyprint>=60.0
+markdown>=3.5.0
+
+# Utilitaires
+python-dotenv>=1.0.0
+pyyaml>=6.0.0
+colorama>=0.4.6
+tqdm>=4.66.0
+loguru>=0.7.0
+
+# Réseau et Proxies
+pysocks>=1.7.1
+
+# Notifications
+discord-webhook>=1.3.0
+
+# Testing
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+
+# Headers et User-Agents
+fake-useragent>=1.4.0
+
+# JSON et Data Processing
+numpy>=1.24.0
+
+# WebSocket
+python-socketio>=5.10.0
+

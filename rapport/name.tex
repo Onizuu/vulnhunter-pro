@@ -1,0 +1,661 @@
+\documentclass[a4paper, 12pt, twoside]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{lmodern}
+\usepackage{ae,aecompl}
+\usepackage{float}
+\usepackage[top=2.5cm, bottom=2cm, left=3cm, right=2.5cm, headheight=15pt]{geometry}
+\usepackage{graphicx}
+\usepackage{eso-pic}
+\usepackage{array}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{tikz}
+\usepackage{caption}
+
+\hypersetup{colorlinks=true, linkcolor=black, urlcolor=blue!70!black}
+
+\input{pagedegarde}
+\title{VulnHunter Pro}
+\entreprise{Master 1 Informatique}
+\datedebut{07 Novembre 2025}
+\datefin{06 Janvier 2026}
+
+\membrea{Benikhlef Elyes \textcolor{cyan}{43000719}}
+\membreb{Girard Alexis \textcolor{cyan}{44004158}}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE,RO]{\thepage}
+\fancyhead[CE,CO]{Rapport de projet informatique}
+\fancyfoot[CE,CO]{Université Paris Nanterre}
+
+\begin{document}
+
+\pagedegarde
+
+\newpage
+
+% ============================================================================
+% TABLE DES MATIÈRES
+% ============================================================================
+\section*{\centering \huge Table des Matières}
+\vspace{1cm}
+
+\begin{enumerate}[label=\textbf{\arabic*.}, leftmargin=*, itemsep=1em]
+    \item \textbf{\color{red} Introduction et Langages utilisés} \dotfill \textbf{\color{red} 3}
+    \item \textbf{\color{blue} Description du projet et objectifs} \dotfill \textbf{\color{blue} 5}
+    \begin{enumerate}[label=\textbf{\textcolor{blue}{(\alph*)}}, leftmargin=1.5cm, itemsep=0.2em]
+        \item \textbf{\color{blue} Objectifs} \dotfill \textbf{\color{blue} 5}
+        \item \textbf{\color{blue} Fonctionnalités Implémentées} \dotfill \textbf{\color{blue} 7}
+    \end{enumerate}
+    \item \textbf{\color{green!60!black} Environnement de travail} \dotfill \textbf{\color{green!60!black} 10}
+    \item \textbf{\color{purple!70!blue} Bibliothèques, Outils et Technologies} \dotfill \textbf{\color{purple!70!blue} 12}
+    \item \textbf{\color{red!70!black} Travail Réalisé} \dotfill \textbf{\color{red!70!black} 14}
+    \begin{enumerate}[label=\textbf{\textcolor{red!70!black}{(\alph*)}}, leftmargin=1.5cm, itemsep=0.2em]
+        \item \textbf{\color{red!70!black} Organisation du travail} \dotfill \textbf{\color{red!70!black} 14}
+        \item \textbf{\color{red!70!black} Difficultés rencontrées} \dotfill \textbf{\color{red!70!black} 15}
+    \end{enumerate}
+    \item \textbf{\color{green!50!black} Bilan} \dotfill \textbf{\color{green!50!black} 17}
+    \begin{enumerate}[label=\textbf{\textcolor{green!50!black}{(\alph*)}}, leftmargin=1.5cm, itemsep=0.2em]
+        \item \textbf{\color{green!50!black} Conclusion} \dotfill \textbf{\color{green!50!black} 17}
+        \item \textbf{\color{green!50!black} Perspectives} \dotfill \textbf{\color{green!50!black} 18}
+    \end{enumerate}
+    \item \textbf{\color{blue!90!black} Intégration de l'IA} \dotfill \textbf{\color{blue!90!black} 19}
+    \begin{enumerate}[label=\textbf{\textcolor{blue!70!black}{(\alph*)}}, leftmargin=1.5cm, itemsep=0.2em]
+        \item \textbf{\color{blue!70!black} Aide de l'IA} \dotfill \textbf{\color{blue!70!black} 19}
+        \item \textbf{\color{blue!70!black} Fonctionnement de l'IA} \dotfill \textbf{\color{blue!70!black} 20}
+    \end{enumerate}
+    \item \textbf{\color{cyan!70!black} Webographie} \dotfill \textbf{\color{cyan!70!black} 21}
+    \vspace{0.5cm}
+    \item \textbf{\color{orange!70!black} Annexes} \dotfill \textbf{\color{orange!70!black} 22}
+    \begin{enumerate}[label=\textbf{\textcolor{orange!70!black}{(\alph*)}}, leftmargin=1.5cm, itemsep=0.2em]
+        \item \textbf{\color{orange!70!black} Cahier des charges} \dotfill \textbf{\color{orange!70!black} 22}
+        \item \textbf{\color{orange!70!black} Manuel utilisateur} \dotfill \textbf{\color{orange!70!black} 23}
+        \item \textbf{\color{orange!70!black} Exemple d'exécution} \dotfill \textbf{\color{orange!70!black} 25}
+    \end{enumerate}
+\end{enumerate}
+
+\vspace{1cm}
+\begin{tcolorbox}[colback=gray!10!white, colframe=gray!50!black, rounded corners, boxrule=0.8mm, width=\textwidth]
+\centering
+\Large \textbf{Bonne lecture et exploration !}
+\end{tcolorbox}
+
+\newpage
+
+% ============================================================================
+% SECTION 1 : INTRODUCTION
+% ============================================================================
+\section{Introduction et Langages utilisés}
+
+\begin{tcolorbox}[colback=red!5!white, colframe=red!75!black, title=\textbf{Contexte et Enjeux}, fonttitle=\large\bfseries, rounded corners, breakable]
+La sécurité des applications web représente aujourd'hui un enjeu stratégique majeur. Selon le rapport annuel de l'OWASP (Open Web Application Security Project), les vulnérabilités applicatives constituent le principal vecteur d'intrusion exploité par les attaquants. Cette réalité s'explique par la complexification croissante des architectures web modernes : multiplication des API, adoption massive du JavaScript côté client, et interconnexion permanente avec des services tiers.
+
+\medskip
+
+Face à ce constat, les entreprises et les développeurs ont besoin d'outils capables d'identifier proactivement les failles de sécurité avant qu'elles ne soient exploitées. Les scanners de vulnérabilités existants souffrent cependant d'un défaut récurrent : un taux élevé de \textbf{faux positifs} (alertes erronées). Ces alertes non pertinentes noient les véritables menaces sous un flot d'informations inutiles, rendant l'exploitation des résultats chronophage et peu fiable.
+
+\medskip
+
+C'est dans ce contexte que s'inscrit le projet \textbf{VulnHunter Pro}. Notre objectif était de concevoir un scanner de vulnérabilités web de nouvelle génération, capable de rivaliser avec les solutions professionnelles tout en restant accessible dans un cadre pédagogique. L'outil adopte une approche hybride innovante : un moteur de détection déterministe garantit la fiabilité des résultats, tandis qu'un module optionnel d'intelligence artificielle enrichit l'analyse contextuelle et permet la génération de scénarios d'attaque sophistiqués.
+
+\medskip
+
+La version finale (v4.4), validée sur plusieurs environnements de test volontairement vulnérables (DVWA, bWAPP), atteint une \textbf{précision de 100\%} grâce à un algorithme de déduplication éliminant toute redondance. Le projet couvre exhaustivement le référentiel \textbf{OWASP Top 10} et produit des rapports exploitables immédiatement par les équipes techniques.
+\end{tcolorbox}
+
+\vspace{0.5cm}
+
+\begin{tcolorbox}[colback=blue!5!white, colframe=blue!75!black, title=\textbf{Langages et Technologies}, fonttitle=\large\bfseries, rounded corners, breakable]
+Le choix de la stack technique a été guidé par des impératifs de performance, de modularité et de compatibilité avec l'écosystème de la cybersécurité :
+
+\begin{itemize}[leftmargin=*, label=\textcolor{blue!75!black}{\textbullet}, itemsep=0.5em]
+    \item \textbf{Python 3.9+} : Langage principal du projet, sélectionné pour sa richesse exceptionnelle en bibliothèques dédiées à la sécurité informatique (requests, aiohttp, beautifulsoup4). L'ensemble du moteur de scan et des modules d'attaque repose sur ce langage.
+    
+    \item \textbf{Architecture Asynchrone (asyncio/aiohttp)} : Pour atteindre des performances de scan optimales, nous avons implémenté une architecture entièrement asynchrone permettant d'exécuter simultanément des centaines de requêtes HTTP.
+    
+    \item \textbf{HTML5 / CSS3 / JavaScript} : Technologies utilisées pour développer l'interface web du projet avec un tableau de bord temps réel et un design moderne épuré.
+    
+    \item \textbf{Flask} : Framework web léger utilisé pour l'API REST et l'interface de contrôle.
+    
+    \item \textbf{Jinja2} : Moteur de templates pour la génération dynamique des rapports HTML professionnels.
+    
+    \item \textbf{SQLite / PostgreSQL} : Stockage des résultats avec flexibilité selon le contexte d'utilisation.
+\end{itemize}
+\end{tcolorbox}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.85\textwidth]{logogemi.png}
+    \caption{Identité visuelle du projet VulnHunter Pro}
+\end{figure}
+
+\clearpage
+
+% ============================================================================
+% SECTION 2 : DESCRIPTION ET OBJECTIFS
+% ============================================================================
+\section{Description du projet et objectifs}
+
+\subsection{Objectifs}
+
+\begin{tcolorbox}[colback=green!5!white, colframe=green!60!black, title=\textbf{\large Objectifs Stratégiques du Projet}, fonttitle=\bfseries, rounded corners, boxrule=0.8mm, drop shadow, breakable]
+Le projet \textit{VulnHunter Pro} a été conçu avec l'ambition de développer une suite de sécurité offensive complète, capable d'automatiser les tests d'intrusion avec une rigueur comparable aux outils professionnels. Nos objectifs se déclinent selon cinq axes stratégiques :
+
+\vspace{0.3cm}
+
+\begin{itemize}[leftmargin=*, label=\textcolor{green!60!black}{$\blacktriangleright$}, itemsep=0.6em]
+    
+    \item \textbf{Couverture exhaustive du référentiel OWASP Top 10 :} L'outil détecte les dix catégories de vulnérabilités critiques : injections (SQL, NoSQL, LDAP, Commandes), failles XSS (Reflected, Stored, DOM-based), problèmes d'authentification, SSRF (falsification de requête côté serveur), vulnérabilités de désérialisation, et mauvaises configurations. Le projet compte \textbf{29 modules de détection}, \textbf{8 modules de reconnaissance} et \textbf{6 modules d'intelligence artificielle}.
+
+    \item \textbf{Architecture modulaire et évolutive :} Le système est conçu comme une plateforme extensible. Chaque type de vulnérabilité est géré par un module indépendant (plugin), permettant l'ajout rapide de nouveaux vecteurs d'attaque sans modification du noyau central.
+
+    \item \textbf{Performance et précision optimales :} L'architecture asynchrone basée sur \texttt{asyncio} permet des scans rapides (< 5 minutes). L'objectif « zéro faux positif » a été atteint grâce à un algorithme de déduplication avancé.
+
+    \item \textbf{Qualité professionnelle du reporting :} Les rapports sont hybrides : résumé exécutif pour les décideurs, sections techniques détaillées pour les développeurs avec preuves de concept et recommandations.
+
+    \item \textbf{Intégration de l'intelligence artificielle :} L'outil intègre optionnellement GPT-4 et Claude pour l'analyse sémantique, la génération de payloads (charges d'attaque) et la rédaction de synthèses.
+\end{itemize}
+\end{tcolorbox}
+
+\begin{center}
+    \fbox{\includegraphics[width=0.65\textwidth]{Diagram-showing-Vulnerability-Management-Process-Flow-Chart.jpg}}
+    \captionof{figure}{Processus de gestion des vulnérabilités}
+\end{center}
+
+\clearpage
+
+\subsection{Fonctionnalités Implémentées}
+
+L'architecture de \textit{VulnHunter Pro} s'articule autour d'un pipeline de \textbf{treize phases distinctes}.
+
+\vspace{0.4cm}
+
+\begin{tcolorbox}[colback=blue!5!white, colframe=blue!75!black, title=\textbf{Phase 1-3 : Reconnaissance et Cartographie}, fonttitle=\bfseries, rounded corners, drop shadow, boxrule=0.5mm]
+\begin{itemize}[leftmargin=*, label=\textcolor{blue!70!black}{\tiny$\blacksquare$}, topsep=3pt, itemsep=2pt]
+    \item \textbf{Fingerprinting (prise d'empreinte) (\texttt{tech\_detection.py})} : Identification des technologies (serveur, CMS, frameworks, bibliothèques JS).
+    \item \textbf{Détection WAF (pare-feu applicatif) (\texttt{waf\_detector.py})} : Identification des Web Application Firewalls (Cloudflare, AWS WAF, ModSecurity).
+    \item \textbf{Énumération sous-domaines (\texttt{subdomain\_enum.py})} : Découverte via Certificate Transparency et bruteforce.
+    \item \textbf{Scan de ports (\texttt{port\_scanner.py})} : Identification des services exposés.
+    \item \textbf{Wayback Machine (\texttt{wayback\_analyzer.py})} : Récupération d'anciennes versions via archive.org.
+    \item \textbf{GitHub Recon (\texttt{github\_recon.py})} : Recherche de fuites de code source et secrets.
+\end{itemize}
+\end{tcolorbox}
+
+\vspace{0.3cm}
+
+\begin{tcolorbox}[colback=red!5!white, colframe=red!75!black, title=\textbf{Phase 4-9 : Moteur de Détection Multi-Vectoriel}, fonttitle=\bfseries, rounded corners, drop shadow, boxrule=0.5mm, breakable]
+Le moteur intègre \textbf{29 modules spécialisés} :
+
+\textbf{Injections Critiques :}
+\begin{itemize}[leftmargin=*, label=\textcolor{red!70!black}{\tiny$\blacksquare$}, topsep=2pt, itemsep=1pt]
+    \item \textbf{SQL Injection} : 50+ payloads (Union, Error, Blind Time/Boolean-based)
+    \item \textbf{NoSQL, LDAP, Command Injection}, \textbf{RCE} (exécution de code à distance), \textbf{XXE} (injection XML)
+\end{itemize}
+
+\textbf{Failles Client/Serveur :}
+\begin{itemize}[leftmargin=*, label=\textcolor{red!70!black}{\tiny$\blacksquare$}, topsep=2pt, itemsep=1pt]
+    \item \textbf{XSS} (Reflected, Stored, DOM), \textbf{SSRF}, \textbf{CSRF} (requête inter-site), \textbf{LFI/RFI} (inclusion de fichiers), \textbf{Open Redirect}
+\end{itemize}
+
+\textbf{Technologies Modernes :}
+\begin{itemize}[leftmargin=*, label=\textcolor{red!70!black}{\tiny$\blacksquare$}, topsep=2pt, itemsep=1pt]
+    \item \textbf{GraphQL Fuzzer}, \textbf{API Fuzzer}, \textbf{WebSocket Scanner}, \textbf{Prototype Pollution}, \textbf{Désérialisation}
+\end{itemize}
+
+\textbf{Logique Métier :}
+\begin{itemize}[leftmargin=*, label=\textcolor{red!70!black}{\tiny$\blacksquare$}, topsep=2pt, itemsep=1pt]
+    \item \textbf{Auth Bypass}, \textbf{IDOR} (accès direct non autorisé), \textbf{Business Logic}, \textbf{Config Analyzer}, \textbf{Race Conditions} (conflits de concurrence), \textbf{File Upload}
+\end{itemize}
+\end{tcolorbox}
+
+\vspace{0.3cm}
+
+\begin{tcolorbox}[colback=purple!5!white, colframe=purple!75!black, title=\textbf{Phase 10-11 : CVE et Menaces 0-Day}, fonttitle=\bfseries, rounded corners, drop shadow, boxrule=0.5mm]
+\begin{itemize}[leftmargin=*, label=\textcolor{purple!70!black}{\tiny$\blacksquare$}, topsep=3pt, itemsep=2pt]
+    \item \textbf{Scanner CVE (vulnérabilités connues) (\texttt{cve\_scanner.py})} : Interrogation temps réel de la base NIST NVD.
+    \item \textbf{NIST Searcher (\texttt{nist\_cve\_searcher.py})} : Filtrage par CVSS (score de gravité), date, type.
+    \item \textbf{Zero-Day Exploiter} (failles non encore publiées) : Test de vecteurs d'attaque non catalogués.
+\end{itemize}
+\end{tcolorbox}
+
+\vspace{0.3cm}
+
+\begin{tcolorbox}[colback=cyan!5!white, colframe=cyan!75!black, title=\textbf{Phase 12-13 : IA et Chaînes d'Attaque}, fonttitle=\bfseries, rounded corners, drop shadow, boxrule=0.5mm]
+\begin{itemize}[leftmargin=*, label=\textcolor{cyan!70!black}{\tiny$\blacksquare$}, topsep=3pt, itemsep=2pt]
+    \item \textbf{AI Analyzer} : Analyse sémantique du contenu des pages.
+    \item \textbf{AI Payload Generator} : Génération de payloads obfusqués via GPT-4/Claude.
+    \item \textbf{ML Detector} : Classification ML des réponses HTTP.
+    \item \textbf{Attack Chains} : Modélisation de graphes d'attaque avec NetworkX pour démontrer les scénarios de compromission.
+\end{itemize}
+\end{tcolorbox}
+
+\begin{figure}[h!]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{Image 03-01-2026 à 15.06.jpeg}
+        \caption{Arborescence du projet}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{Image 03-01-2026 à 15.06 (1).jpeg}
+        \caption{Structure des modules}
+    \end{minipage}
+\end{figure}
+
+\clearpage
+
+% ============================================================================
+% SECTION 3 : ENVIRONNEMENT DE TRAVAIL
+% ============================================================================
+\section{Environnement de travail}
+
+\begin{tcolorbox}[colback=gray!5!white, colframe=gray!75!black, title=\textbf{Notre environnement de développement}, fonttitle=\large\bfseries, breakable]
+Le développement s'est appuyé sur un environnement moderne et collaboratif :
+
+\vspace{0.3cm}
+
+\textbf{Systèmes d'exploitation :}
+\begin{itemize}[leftmargin=*, itemsep=0.2em]
+    \item \textbf{macOS (Apple Silicon M1/M2)} : Développement principal.
+    \item \textbf{Linux (Ubuntu 22.04 LTS)} : Tests et déploiement de référence.
+    \item \textbf{Windows 11 via WSL2} : Compatibilité assurée.
+\end{itemize}
+
+\textbf{Outils de développement :}
+\begin{itemize}[leftmargin=*, itemsep=0.2em]
+    \item \textbf{Visual Studio Code} avec extensions Pylance, Black, Flake8, MyPy, GitLens.
+    \item \textbf{Python 3.9+} avec environnement virtuel (venv).
+\end{itemize}
+
+\begin{center}
+    \includegraphics[width=7cm]{env-python-vscode-windows.png}
+\end{center}
+
+\textbf{Gestion de version et collaboration :}
+\begin{itemize}[leftmargin=*, itemsep=0.2em]
+    \item \textbf{Git/GitHub} : Workflow basé sur branches (main, feature/*, fix/*) avec Pull Requests et revue de code croisée.
+    \item \textbf{Conventional Commits} : Nommage structuré des commits.
+\end{itemize}
+
+\textbf{Virtualisation :}
+\begin{itemize}[leftmargin=*, itemsep=0.2em]
+    \item \textbf{Docker} : Isolation des services (PostgreSQL, Redis). Fichiers \texttt{docker-compose.yml} et \texttt{Dockerfile} fournis.
+\end{itemize}
+
+\textbf{Communication :}
+\begin{itemize}[leftmargin=*, itemsep=0.2em]
+    \item \textbf{Discord} : Serveur dédié avec canaux thématiques, sessions de pair programming en partage d'écran.
+\end{itemize}
+
+\begin{center}
+    \includegraphics[width=7cm]{githubdisc.png}
+\end{center}
+\end{tcolorbox}
+
+\clearpage
+
+% ============================================================================
+% SECTION 4 : BIBLIOTHÈQUES
+% ============================================================================
+\section{Bibliothèques, Outils et Technologies}
+
+\begin{tcolorbox}[colback=blue!5!white, colframe=blue!75!black, title=\textbf{L'Arsenal Technique de VulnHunter Pro}, fonttitle=\large\bfseries, breakable]
+
+\textbf{1. Noyau Asynchrone et Réseau}
+\begin{itemize}[leftmargin=*, itemsep=0.3em]
+    \item \textbf{asyncio} : Programmation asynchrone pour gérer des milliers de tâches concurrentes.
+    \item \textbf{aiohttp} : Client HTTP asynchrone haute performance.
+    \item \textbf{requests / httpx} : Clients synchrones pour cas spécifiques.
+\end{itemize}
+
+\textbf{2. Analyse et Parsing}
+\begin{itemize}[leftmargin=*, itemsep=0.3em]
+    \item \textbf{BeautifulSoup4 / lxml} : Parsing HTML/XML pour extraire formulaires et vecteurs d'attaque.
+    \item \textbf{re} : Expressions régulières pour détection de patterns.
+    \item \textbf{PyYAML / python-dotenv} : Gestion des configurations et secrets.
+\end{itemize}
+
+\textbf{3. Intelligence Artificielle}
+\begin{itemize}[leftmargin=*, itemsep=0.3em]
+    \item \textbf{OpenAI API / Anthropic API} : Modèles GPT-4 et Claude pour analyse sémantique.
+    \item \textbf{scikit-learn} : Classification ML des réponses HTTP.
+    \item \textbf{numpy / pandas} : Manipulation de données et scoring.
+\end{itemize}
+
+\textbf{4. Visualisation et Reporting}
+\begin{itemize}[leftmargin=*, itemsep=0.3em]
+    \item \textbf{Jinja2} : Génération dynamique de rapports HTML.
+    \item \textbf{Plotly} : Graphiques interactifs et tableaux de bord.
+    \item \textbf{NetworkX / Matplotlib} : Modélisation des chaînes d'attaque.
+\end{itemize}
+
+\textbf{5. Backend Web}
+\begin{itemize}[leftmargin=*, itemsep=0.3em]
+    \item \textbf{Flask / Flask-SocketIO} : API REST et communication temps réel WebSocket.
+    \item \textbf{SQLite / PostgreSQL / SQLAlchemy} : Stockage et ORM.
+\end{itemize}
+\end{tcolorbox}
+
+\begin{center}
+    \includegraphics[width=10cm]{full-web-cycle-technology-stack--1-.png}
+    \captionof{figure}{Pile logicielle et cycle de traitement}
+\end{center}
+
+\clearpage
+
+% ============================================================================
+% SECTION 5 : TRAVAIL RÉALISÉ
+% ============================================================================
+\section{Travail Réalisé}
+
+\subsection{Organisation du travail}
+
+\begin{tcolorbox}[colback=green!5!white, colframe=green!75!black, title=\textbf{Répartition des Tâches}, fonttitle=\large\bfseries, breakable]
+
+\textbf{Alexis Girard - Core \& Security Engineering :}
+\begin{itemize}[leftmargin=*, itemsep=0.2em]
+    \item Architecture asynchrone (asyncio/aiohttp) et moteur de scan (\texttt{scanner\_engine.py}).
+    \item Modules de détection : SQL Injection, XSS, SSRF, RCE.
+    \item Algorithme de déduplication (100\% précision).
+    \item Module d'analyse de chaînes d'attaque.
+    \item Tests unitaires et d'intégration.
+\end{itemize}
+
+\textbf{Elyes Benikhlef - Frontend \& AI Engineering :}
+\begin{itemize}[leftmargin=*, itemsep=0.2em]
+    \item Interface web et tableau de bord temps réel.
+    \item Design UI/UX moderne et épuré.
+    \item Intégration IA (OpenAI GPT-4, Anthropic Claude, Ollama).
+    \item Système de génération de rapports (templates Jinja2).
+    \item Documentation technique et configuration Docker.
+\end{itemize}
+
+\textbf{Travail collaboratif :}
+\begin{itemize}[leftmargin=*, itemsep=0.2em]
+    \item Architecture globale et interfaces entre modules.
+    \item Sessions de pair programming pour les parties critiques.
+    \item Tests sur environnements vulnérables (DVWA, bWAPP).
+    \item Revue de code croisée via Pull Requests.
+\end{itemize}
+
+\textbf{Méthodologie :} Approche itérative Agile avec sprints hebdomadaires.
+\end{tcolorbox}
+
+\clearpage
+
+\subsection{Difficultés rencontrées}
+
+\begin{tcolorbox}[colback=red!5!white, colframe=red!75!black, title=\textbf{Défis Techniques et Solutions}, fonttitle=\large\bfseries, breakable]
+
+\textbf{1. Gestion des Faux Positifs}
+
+\textit{Problème :} Taux initial de faux positifs de 77\%. Chaque erreur 500 était interprétée comme vulnérabilité.
+
+\textit{Solution :} Système de validation multicritère :
+\begin{itemize}[leftmargin=*, itemsep=0.1em]
+    \item Recherche de marqueurs spécifiques (« SQL syntax error »).
+    \item Comparaison des réponses normales vs. injectées.
+    \item Algorithme de déduplication regroupant les failles similaires.
+\end{itemize}
+\textit{Résultat :} Passage de 23\% à 100\% de précision.
+
+\vspace{0.3cm}
+
+\textbf{2. Performance Asynchrone}
+
+\textit{Problème :} Race conditions (conflits de concurrence), épuisement des descripteurs de fichiers (« Too many open files »).
+
+\textit{Solution :}
+\begin{itemize}[leftmargin=*, itemsep=0.1em]
+    \item Sémaphores (verrous de synchronisation via \texttt{asyncio.Semaphore}) limitant les requêtes simultanées.
+    \item Pool de connexions TCP via \texttt{aiohttp.TCPConnector}.
+    \item Limitation du débit de requêtes avec timeouts adaptatifs.
+\end{itemize}
+
+\vspace{0.3cm}
+
+\textbf{3. Intégration des APIs IA}
+
+\textit{Problème :} Quotas, coûts, temps de réponse variable.
+
+\textit{Solution :} Cache pour éviter les appels redondants, IA optionnelle, support de modèles locaux (Ollama).
+
+\vspace{0.3cm}
+
+\textbf{4. Génération de Rapports}
+
+\textit{Solution :} Rapports HTML via Jinja2, conversion PDF optionnelle via outils externes.
+\end{tcolorbox}
+
+\clearpage
+
+% ============================================================================
+% SECTION 6 : BILAN
+% ============================================================================
+\section{Bilan}
+
+\subsection{Conclusion}
+
+\begin{tcolorbox}[colback=green!5!white, colframe=green!75!black, title=\textbf{Synthèse du Projet}, fonttitle=\large\bfseries, breakable]
+
+Le projet \textit{VulnHunter Pro} constitue une réussite technique et pédagogique.
+
+\textbf{Objectifs atteints :}
+\begin{itemize}[leftmargin=*, itemsep=0.3em]
+    \item \textbf{Couverture OWASP Top 10 complète} : 29 modules de détection.
+    \item \textbf{Précision de 100\%} : Zéro faux positif en v4.4.
+    \item \textbf{Performance optimale} : Scan complet en < 5 minutes.
+    \item \textbf{Reporting professionnel} : Rapports hybrides technique/exécutif.
+    \item \textbf{Intégration IA réussie} : Analyse sémantique et génération de payloads.
+\end{itemize}
+
+\textbf{Chiffres clés :}
+\begin{center}
+\begin{tabular}{|l|c|}
+\hline
+\textbf{Métrique} & \textbf{Valeur} \\
+\hline
+Lignes de code Python & $\sim$ 15 000 \\
+Modules de vulnérabilités & 29 \\
+Modules de reconnaissance & 8 \\
+Modules d'intelligence & 6 \\
+Tests unitaires & 32 \\
+Précision finale & 100\% \\
+\hline
+\end{tabular}
+\end{center}
+
+\textbf{Compétences développées :} Programmation asynchrone, vulnérabilités web, travail collaboratif Git, intégration d'APIs IA.
+\end{tcolorbox}
+
+\subsection{Perspectives}
+
+\begin{tcolorbox}[colback=blue!5!white, colframe=blue!75!black, title=\textbf{Évolutions v5.0}, fonttitle=\large\bfseries]
+\begin{itemize}[leftmargin=*, itemsep=0.3em]
+    \item \textbf{Application Mobile} : React Native pour monitoring à distance.
+    \item \textbf{IA Souveraine} : Modèles locaux (Ollama, Llama 3, Mistral).
+    \item \textbf{Auto-Exploit} : Validation de l'exploitabilité réelle des failles.
+    \item \textbf{Intégration SIEM} : Connecteurs Splunk, ELK, Wazuh.
+    \item \textbf{Analyse SAST} : Code source statique en complément du DAST.
+\end{itemize}
+\end{tcolorbox}
+
+\clearpage
+
+% ============================================================================
+% SECTION 7 : INTÉGRATION DE L'IA
+% ============================================================================
+\section{Intégration de l'IA}
+
+\subsection{Aide de l'IA au Développement}
+
+\begin{tcolorbox}[colback=purple!5!white, colframe=purple!75!black, title=\textbf{Utilisation de l'IA Comme Outil d'Assistance}, fonttitle=\large\bfseries, breakable]
+
+\textbf{Aide à la conception :}
+\begin{itemize}[leftmargin=*, itemsep=0.3em]
+    \item \textbf{Architecture} : Validation des design patterns (Factory pour scanners, Singleton pour config).
+    \item \textbf{Compréhension technique} : Clarification des protocoles réseau (headers HTTP, comportement WAF, CORS).
+    \item \textbf{Documentation} : Relecture et correction du README, structuration du rapport.
+\end{itemize}
+
+\textbf{Aide au développement :}
+\begin{itemize}[leftmargin=*, itemsep=0.3em]
+    \item \textbf{Pair programming} : Génération de squelettes de fonctions répétitives et boilerplate code.
+    \item \textbf{Tests} : Génération de tests unitaires pour les cas standards.
+    \item \textbf{Parties critiques} : Le moteur de déduplication, la gestion de concurrence et la logique centrale ont été écrits et validés \textbf{manuellement} pour garantir leur justesse.
+\end{itemize}
+\end{tcolorbox}
+
+\subsection{Fonctionnement de l'IA dans l'Outil}
+
+\begin{tcolorbox}[colback=purple!5!white, colframe=purple!75!black, title=\textbf{L'IA Comme Fonctionnalité Intégrée}, fonttitle=\large\bfseries]
+Au-delà de l'assistance au développement, l'IA est une \textbf{fonctionnalité} de VulnHunter Pro :
+
+\begin{itemize}[leftmargin=*, itemsep=0.4em]
+    \item \textbf{Analyse sémantique} : L'API OpenAI analyse le contenu HTML pour identifier des contextes de vulnérabilité invisibles aux expressions régulières (ex: formulaire de réinitialisation mal protégé).
+    
+    \item \textbf{Génération de payloads} : Création dynamique de payloads obfusqués pour contourner les WAF, adaptés au contexte spécifique de chaque cible.
+    
+    \item \textbf{Synthèses exécutives} : Rédaction automatique de résumés en langage naturel pour les rapports destinés aux décideurs non techniques.
+\end{itemize}
+
+L'utilisation reste \textbf{optionnelle et contrôlée} : le scanner fonctionne parfaitement en mode déterministe sans clé API.
+\end{tcolorbox}
+
+\clearpage
+
+% ============================================================================
+% SECTION 8 : WEBOGRAPHIE
+% ============================================================================
+\section{Webographie}
+
+\begin{tcolorbox}[colback=cyan!5!white, colframe=cyan!75!black, title=\textbf{Ressources Utilisées}, fonttitle=\large\bfseries]
+\begin{itemize}[leftmargin=*, itemsep=0.5em]
+    \item \textbf{OWASP Top 10} (\url{https://owasp.org/Top10/}) : Référentiel des vulnérabilités web critiques.
+    \item \textbf{NIST NVD} (\url{https://nvd.nist.gov/}) : Base de données CVE pour le comparateur de versions.
+    \item \textbf{Flask Documentation} (\url{https://flask.palletsprojects.com/}) : Backend et API REST.
+    \item \textbf{Python asyncio} (\url{https://docs.python.org/3/library/asyncio.html}) : Architecture asynchrone.
+    \item \textbf{OpenAI API} (\url{https://platform.openai.com/docs/}) : Intégration IA.
+    \item \textbf{Ollama} (\url{https://ollama.ai/}) : Modèles IA locaux.
+    \item \textbf{SQLMap} (\url{https://sqlmap.org/}) : Inspiration pour les payloads SQL.
+    \item \textbf{PortSwigger Academy} (\url{https://portswigger.net/web-security}) : Compréhension des vulnérabilités.
+\end{itemize}
+\end{tcolorbox}
+
+\vspace{0.5cm}
+
+\begin{tcolorbox}[colback=gray!5!white, colframe=gray!60!black, arc=4mm, boxsep=6mm]
+\textbf{Remerciements}
+
+\vspace{0.3cm}
+Nous tenons à exprimer nos sincères remerciements à \textbf{M. François Delbot} et \textbf{Mme Inès Alaya Louhichi} pour leur encadrement, leur disponibilité et leurs conseils précieux tout au long de la réalisation de ce projet.
+\end{tcolorbox}
+
+\clearpage
+
+% ============================================================================
+% SECTION 9 : ANNEXES
+% ============================================================================
+\section{Annexes}
+
+\subsection{Cahier des charges}
+
+\begin{tcolorbox}[colback=blue!5!white, colframe=blue!75!black, title=\textbf{Cahier des charges}]
+\begin{itemize}[leftmargin=*, itemsep=0.4em]
+    \item \textbf{Objectif principal :} Scanner de vulnérabilités web automatisé, fiable, avec faible taux de faux positifs et reporting exploitable.
+    
+    \item \textbf{Public cible :} Étudiants en cybersécurité, développeurs web, professionnels débutants en sécurité offensive.
+    
+    \item \textbf{Fonctionnalités :}
+    \begin{enumerate}
+        \item Reconnaissance de la cible (technologies, sous-domaines, ports).
+        \item Détection automatisée (SQLi, XSS, LFI/RFI, SSRF, etc.).
+        \item Analyse de chaînes d'attaque.
+        \item Interface web avec tableau de bord temps réel.
+        \item Génération de rapports professionnels.
+    \end{enumerate}
+    
+    \item \textbf{Contraintes techniques :}
+    \begin{enumerate}
+        \item Python avec architecture asynchrone.
+        \item Compatibilité Linux, macOS, Windows (WSL).
+        \item Bibliothèques standards et maintenables.
+    \end{enumerate}
+\end{itemize}
+\end{tcolorbox}
+
+\subsection{Manuel utilisateur}
+
+\begin{tcolorbox}[colback=blue!5!white, colframe=blue!70!black, title=\textbf{Guide d'utilisation rapide}]
+
+\textbf{Étape 1 - Installation :}
+\begin{verbatim}
+git clone <repository-url>
+cd vulnhunter
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+\end{verbatim}
+
+\textbf{Étape 2 - Configuration (optionnelle) :}
+Créer un fichier \texttt{.env} avec les clés API pour activer l'IA.
+
+\textbf{Étape 3 - Lancement :}
+\begin{verbatim}
+./start.sh
+\end{verbatim}
+Accéder à \texttt{http://localhost:5000}
+
+\textbf{Étape 4 - Utilisation :}
+Depuis le tableau de bord, renseigner l'URL cible et lancer le scan.
+
+\textbf{Étape 5 - Résultats :}
+Consulter les vulnérabilités détectées et exporter les rapports (HTML/JSON).
+
+\textbf{Bonnes pratiques :} Utiliser uniquement sur des environnements de test ou avec autorisation explicite.
+\end{tcolorbox}
+
+\clearpage
+
+\subsection{Exemple d'exécution}
+
+Cette section illustre le fonctionnement de \textit{VulnHunter Pro} sur une application web volontairement vulnérable.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{Home page.jpeg}
+\caption{Interface de configuration du scan}
+\label{fig:config-scan}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{Image 1.jpeg}
+\caption{Démarrage du scanner et initialisation des services}
+\label{fig:demarrage}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{Resultat.jpeg}
+\caption{Synthèse des vulnérabilités détectées}
+\label{fig:resultats}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{Test.jpeg}
+\caption{Extrait du résumé exécutif généré}
+\label{fig:rapport}
+\end{figure}
+
+\end{document}

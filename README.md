@@ -1,6 +1,6 @@
-# 🚀 VulnHunter Pro v4.4
+# 🚀 VulnHunter Pro
 
-**Le scanner de cybersécurité IA-augmenté le plus avancé du monde**
+**Scanner de vulnérabilités web assisté par Intelligence Artificielle**
 
 [![Python](https://img.shields.io/badge/Python-3.9+-blue.svg)](https://python.org)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
@@ -8,34 +8,9 @@
 
 ---
 
-## ⚡ **Résultats v4.4 (Production Ready)**
-
-Cette version atteint une **précision de 100%** avec zéro faux positifs.
-
-| Métrique | Avant | Maintenant | Amélioration |
-|----------|-------|------------|--------------|
-| **Total vulnérabilités** | 49 | **18** | 🔽 **-63%** |
-| **Duplications éliminées** | 10 | **41** | ✅ **+310%** |
-| **Précision** | 23% | **100%** | ✅ **Parfaite** |
-| **Faux positifs** | 38 | **0** | ✅ **Zéro** |
-| **Interface** | Complexe | **Simplifiée** | ✅ **+UX** |
-
-### 🎯 Vulnérabilités Détectées (Toutes LÉGITIMES)
-
-| Type | Nombre | Détail |
-|------|--------|---------|
-| **SQL Injection** | 13 | 11 pages avec param `id` + 2 autres paramètres |
-| **Error Disclosure** | 2 | Messages MySQL exposés |
-| **CSRF** | 1 | Formulaire sans token |
-| **Headers manquants** | 1 | HSTS (regroupé) |
-| **Server leak** | 1 | Header Server |
-| **TOTAL** | **18** | **100% vraies** |
-
----
-
 ## 🎯 **Vue d'ensemble**
 
-VulnHunter Pro est un scanner de vulnérabilités web révolutionnaire qui combine :
+VulnHunter Pro est un scanner de vulnérabilités web qui combine :
 
 - 🤖 **Intelligence Artificielle** (GPT-4, Machine Learning)
 - 🔗 **Analyse prédictive** de chaînes d'attaque
@@ -300,11 +275,11 @@ mypy .
 
 ## 🏆 **Performances**
 
-### Métriques
-- **Temps de scan** : 2-5 minutes pour site moyen
-- **Précision** : 95%+ sur vulnérabilités connues (100% en v4.4)
-- **Évolutivité** : Supporte 100+ scans simultanés
-- **Fiabilité** : Uptime 99.9% en production
+### Capacités
+- **Rapidité** : Exécution asynchrone via asyncio permettant de traiter plusieurs requêtes simultanément pour optimiser le temps de scan.
+- **Précision** : Analyse basée sur des signatures de vulnérabilités connues et validation par comparaison de patterns HTTP pour limiter les erreurs d'interprétation.
+- **Modularité** : Architecture découplée facilitant l'intégration de nouveaux vecteurs de test sans modifier le noyau du système.
+- **Robustesse** : Gestion native des timeouts et des erreurs de connexion pour garantir la continuité des scans sur des cibles instables.
 
 ### Optimisations
 - Cache Redis pour résultats
@@ -331,7 +306,7 @@ mypy .
 
 ---
 
-## 🌟 **Roadmap v5.0**
+## 🌟 **Roadmap**
 
 ### Améliorations Prévue
 - 🤖 **Deep Learning** (BERT, GANs)
@@ -350,27 +325,6 @@ mypy .
 Libre utilisation pour projets personnels et commerciaux.
 
 ---
-
-## 🏆 **À propos**
-
-**VulnHunter Pro** représente l'avenir de la cybersécurité :
-
-- 🎯 **IA-augmenté** : L'intelligence artificielle au service de la sécurité
-- 🔮 **Prédictif** : Analyse des menaces avant qu'elles ne surviennent
-- 💼 **Business-focused** : Valeur démontrable pour les entreprises
-- 🚀 **Innovant** : Technologies de pointe pour résultats exceptionnels
-
----
-
-## 🎉 **Prêt à révolutionner votre cybersécurité ?**
-
-**Lancez VulnHunter Pro et découvrez l'avenir de la détection de vulnérabilités !**
-
-```bash
-./install.sh && ./start.sh
-```
-
-**🏆 VulnHunter Pro - L'IA au service de votre sécurité ! 🏆**
 
 ---
 
